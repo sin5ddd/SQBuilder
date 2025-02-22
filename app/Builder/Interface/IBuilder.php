@@ -86,20 +86,6 @@
 			}
 			$update_values = implode(', ', $update_values_arr);
 			
-			if ($this->method === 'upsert') { // todo 別クラス化
-				if (sizeof($this->fields) < 1 || sizeof($this->values) < 1
-				    || empty($this->key) || empty($this->key_value)) {
-					throw new Exception('upsert params are not specified yet');
-				}
-				$insert_fields = implode(', ', $this->fields);
-				$insert_values = implode(', ', $this->values);
-				
-				
-				$ret = "INSERT INTO $this->from ($this->key, $insert_fields)";
-				$ret .= " VALUES ($this->key_value,$insert_values)";
-				$ret .= "ON DUPLICATE KEY UPDATE $update_values";
-				
-			}
 			// todo BulkInsert別クラスで実装
 			// todo BulkUpdate別クラスで実装
 			return $ret;
