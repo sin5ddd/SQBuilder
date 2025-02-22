@@ -1,12 +1,11 @@
 <?php
 	
-	namespace sin5ddd\SQBuilder\Builder;
+	namespace sin5ddd\SQBuilder\Builder\Interface;
 	
 	use Exception;
 	
-	class IBuilder {
+	abstract class IBuilder {
 		private array  $params = [];
-		private array  $where  = [];
 		protected string $from   = '';
 		private array  $order  = [];
 		protected string $method;
@@ -72,24 +71,13 @@
 		
 		
 		/**
-		 * @param string|null $arg
-		 *
-		 * @return SQBuilder
-		 */
-		// public function where(?string $arg): self {
-		// 	if (!empty($arg)) {
-		// 		array_push($this->where, $arg);
-		// 	}
-		// 	return $this;
-		// }
-		
-		/**
 		 * SQL文書き出し
 		 *
 		 * @return string
 		 * @throws Exception
 		 */
-		public function build(): string {
+		abstract public function build(): string;
+		public function build_old():string{
 			$ret = 'not implemented for ' . $this->method;
 			
 			$update_values_arr = [];

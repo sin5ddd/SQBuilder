@@ -16,7 +16,9 @@
     "psr-4": {
       "sin5ddd\\SQBuilder\\": "app",
       "sin5ddd\\SQBuilder\\Builder\\": "app/Builder",
-      "sin5ddd\\SQBuilder\\Keys\\": "app/Keys"
+      "sin5ddd\\SQBuilder\\Builder\\Interface\\": "app/Builder/Interface",
+      "sin5ddd\\SQBuilder\\Keys\\": "app/Keys",
+      "sin5ddd\\SQBuilder\\Helper\\": "app/Helper"
     }
   },
   "require-dev": {
