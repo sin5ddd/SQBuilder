@@ -21,7 +21,7 @@
 				'zip'        => '10293',
 				'country'    => 'England',
 			];
-			self::assertIsObject($insert->setInto('users')
+			self::assertIsObject($insert->setTable('users')
 			       ->addPairs($arr));
 			
 			$ret = $insert->build();
