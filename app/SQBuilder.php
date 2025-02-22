@@ -3,6 +3,7 @@
 	namespace sin5ddd\SQBuilder;
 	
 	use Exception;
+	use sin5ddd\SQBuilder\Builder\Insert;
 	use sin5ddd\SQBuilder\Builder\IBuilder;
 	use sin5ddd\SQBuilder\Builder\Select;
 	
@@ -22,6 +23,7 @@
 			// $this->params = $this->parse(func_get_args());
 			return match ($type) {
 				SQL_TYPE::SELECT => new Select(),
+				SQL_TYPE::INSERT => new Insert(),
 				default          => new Select(),
 			};
 		}
