@@ -28,7 +28,7 @@
 			}
 			$set_arr = [];
 			foreach ($this->values as $k=>$v) {
-				$set_arr[] = "$k=".EscapeValues::check_str($v);
+				$set_arr[] = "$k = ".EscapeValues::check_str($v);
 			}
 			$set_string = implode(", ", $set_arr);
 			$ret = "UPDATE $this->table SET $set_string WHERE $this->condition";

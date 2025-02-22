@@ -3,6 +3,7 @@
 	namespace sin5ddd\SQBuilder\Builder;
 	
 	use Exception;
+	use sin5ddd\SQBuilder\Builder\Interface\IBuilder;
 	
 	class Select extends IBuilder {
 		

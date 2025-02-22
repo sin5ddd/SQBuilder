@@ -86,11 +86,7 @@
 			}
 			$update_values = implode(', ', $update_values_arr);
 			
-			if ($this->method == 'update') { // todo 別クラス化
-				$ret = "UPDATE " . $this->from . ' SET ';
-				$ret .= $update_values;
-				$ret .= " WHERE " . implode(' AND ', $this->where);
-			} else if ($this->method === 'upsert') { // todo 別クラス化
+			if ($this->method === 'upsert') { // todo 別クラス化
 				if (sizeof($this->fields) < 1 || sizeof($this->values) < 1
 				    || empty($this->key) || empty($this->key_value)) {
 					throw new Exception('upsert params are not specified yet');

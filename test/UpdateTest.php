@@ -20,6 +20,6 @@
 				->setTable('users')
 				->setCondition(Where::equal('id',1));
 			$res = $update->build();
-			self::assertEquals("UPDATE users SET first_name='Jane' WHERE id = 1", $res);
+			self::assertEquals("UPDATE users SET first_name = 'Jane' WHERE id = 1", $res);
 		}
 	}
