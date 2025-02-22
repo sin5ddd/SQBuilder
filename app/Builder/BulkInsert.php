@@ -6,7 +6,7 @@
 	use sin5ddd\SQBuilder\Builder\Interface\IUpsert;
 	
 	class BulkInsert extends IUpsert {
-		private array   $columns = [];
+		protected array   $columns = [];
 		protected array $values  = [];
 		
 		/**
@@ -53,7 +53,6 @@
 		}
 		
 		public function build(): string {
-			// var_dump($this->values);die;
 			$str_columns = implode(', ', $this->columns);
 			$values_arr  = [];
 			foreach ($this->values as $value) {
