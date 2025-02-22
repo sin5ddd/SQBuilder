@@ -89,6 +89,31 @@
 		}
 		
 		/**
+		 * LEFT JOINのみ対応
+		 *
+		 * @param string  $table_name
+		 * @param string  $master_key
+		 * @param ?string $table_key 指定されない場合はマスター側と同名のカラムを取得します
+		 * @param ?string $append_cond
+		 *
+		 *
+		 * @return $this
+		 */
+		public function join(string $table_name, string $master_key, string $table_key, ?string $as=null, ?string $append_cond = null): self {
+			if($as){
+				$table_name.=" AS $as";
+			}
+			$join_state = "LEFT JOIN $table_name ON $master_key = $table_name.$table_key";
+			if (!is_null($append_cond)) {
+				$join_state .= " AND $append_cond";
+			}
+			if ($join_state !== '') {
+				$this->join[] = $join_state;
+			}
+			return $this;
+		}
+		
+		/**
 		 * @param string $arg
 		 *
 		 * @return Select

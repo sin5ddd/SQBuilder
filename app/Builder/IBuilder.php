@@ -91,49 +91,18 @@
 		 */
 		public function build(): string {
 			$ret = 'not implemented for ' . $this->method;
-			if (empty($this->select)) {
-				//				throw new Exception("QueryBuilder: no SELECT field specified.");
-			}
-			if (empty($this->from)) {
-				//				throw new Exception("QueryBuilder: no FROM table specified.");
-			}
 			
 			$update_values_arr = [];
 			for ($i = 0; $i < sizeof($this->fields); $i++) {
 				$update_values_arr[] = "{$this->fields[$i]} = {$this->values[$i]}";
 			}
 			$update_values = implode(', ', $update_values_arr);
-			// Generate SELECT
-			if ($this->method == 'select') {
-				$ret = "SELECT ";
-				$ret .= implode(', ', $this->select);
-				$ret .= " FROM {$this->from}";
-				if (!empty($this->join)) {
-					$ret .= ' ' . implode(' ', $this->join);
-				}
-				if (!empty($this->where)) {
-					// Generate WHERE
-					$ret .= " WHERE ";
-					$ret .= implode(' AND ', $this->where);
-				}
-				if (!empty($this->group)) {
-					// Generate GROUP
-					$ret .= " GROUP BY ";
-					$ret .= implode(', ', $this->group);
-				}
-				if (!empty($this->order)) {
-					// Generate ORDER
-					$ret .= " ORDER BY ";
-					$ret .= implode(', ', $this->order);
-				}
-				if ($this->limit > 0) {
-					$ret .= " LIMIT $this->limit";
-				}
-			} else if ($this->method == 'update') {
+			
+			if ($this->method == 'update') { // todo 別クラス化
 				$ret = "UPDATE " . $this->from . ' SET ';
 				$ret .= $update_values;
 				$ret .= " WHERE " . implode(' AND ', $this->where);
-			} else if ($this->method === 'upsert') {
+			} else if ($this->method === 'upsert') { // todo 別クラス化
 				if (sizeof($this->fields) < 1 || sizeof($this->values) < 1
 				    || empty($this->key) || empty($this->key_value)) {
 					throw new Exception('upsert params are not specified yet');
@@ -147,39 +116,11 @@
 				$ret .= "ON DUPLICATE KEY UPDATE $update_values";
 				
 			}
+			// todo BulkInsert別クラスで実装
+			// todo BulkUpdate別クラスで実装
 			return $ret;
 		}
 		
-		/**
-		 * @param string|array $args
-		 *
-		 * @return IBuilder
-		 */
-		public function select(string|array $args): self {
-			if (!empty($this->method) && $this->method != 'select') {
-				throw new Exception('method has been chosen already:' . $this->method);
-			}
-			$this->method = 'select';
-			// $arg_list     = explode(',', str_replace(' ', '', $arg));
-			if (gettype($args) === "array") {
-				$arg_list = $args;
-			} else {
-				$arg_list = explode(',', str_replace('  ', ' ', $args));
-			}
-			foreach ($arg_list as $v) {
-				$this->select[] = $v;
-			}
-			return $this;
-		}
-		
-		public function select_long(string $arg): self {
-			if (!empty($this->method) && $this->method != 'select') {
-				throw new Exception('method has been chosen already:' . $this->method);
-			}
-			$this->method = 'select';
-			array_push($this->select, $arg);
-			return $this;
-		}
 		
 		public function update(string $arg): self {
 			$this->set_method('update');
@@ -193,32 +134,6 @@
 			} else {
 				throw new Exception('method has been chosen already:' . $this->method);
 			}
-		}
-		
-		/**
-		 * @throws Exception
-		 */
-		public function join(string $table_name, string $master_key, string $table_key = '', string $append_cond = ''): self {
-			if ($this->method !== 'select') {
-				// SELECT文以外では例外
-				throw new Exception('Join must be called in SELECT method.');
-			}
-			if ($table_key === '') {
-				if (str_contains($master_key, '.')) {
-					$tmp_arr   = explode('.', $master_key);
-					$table_key = $tmp_arr[1];
-				} else {
-					$table_key = $master_key;
-				}
-			}
-			$join_state = "LEFT JOIN $table_name ON $master_key = $table_name.$table_key";
-			if ($append_cond !== '') {
-				$join_state .= " AND $append_cond";
-			}
-			if ($join_state !== '') {
-				$this->join[] = $join_state;
-			}
-			return $this;
 		}
 		
 		public function upsert(string $arg): self {
