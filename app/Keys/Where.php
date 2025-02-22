@@ -6,11 +6,11 @@
 	
 	class Where extends ISQLKey {
 		static public function equal(string $key, string|int|float $value): string {
-			return "$key = ".self::check_str($value);
+			return "$key = ".EscapeValues::check_str($value);
 		}
 		
 		static public function notEqual(string $key, string|int|float $value): string {
-			return "$key <> ".self::check_str($value);
+			return "$key <> ".EscapeValues::check_str($value);
 		}
 		
 		static public function greater(string $key, int|float $value): string {
