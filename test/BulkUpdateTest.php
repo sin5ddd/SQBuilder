@@ -40,7 +40,7 @@
 			];
 			$bulk->setTableName('users')
 			     ->addKey('id')
-			     ->acceptEmpty()
+			     ->acceptNull()
 			     ->bulkAddPairs($arr)
 			;
 			$ret = $bulk->build();

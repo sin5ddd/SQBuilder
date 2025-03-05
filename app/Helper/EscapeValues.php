@@ -3,11 +3,17 @@
 	namespace sin5ddd\SQBuilder\Helper;
 	
 	class EscapeValues {
-		static public function check_str($value) {
+		static public function check_str($value, bool $accept_null = true) {
 			if (is_string($value)) {
 				$value = "'$value'";
 			} else if (is_bool($value)) {
 				$value = intval($value); // MySQL・SQLiteのみ
+			} else if (is_null($value)) {
+				if ($accept_null) {
+					$value = 'NULL';
+				} else {
+					$value = '""';
+				}
 			}
 			if (is_array($value)) {
 				for ($i = 0; $i < sizeof($value); $i++) {

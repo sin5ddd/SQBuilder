@@ -13,6 +13,7 @@
 					'firstName' => 'John',
 					'lastName'  => 'Doe',
 					'email'     => 'john@doe.com',
+					'age'       => 22,
 				],
 				[
 					'firstName' => 'Jane',
@@ -23,10 +24,10 @@
 					'firstName' => 'JaneJane',
 					'lastName'  => 'Doe',
 					'email'     => 'janejane@doe.com',
+					'age'       => 32,
 				],
 				[
 					'firstName' => 'テスト',
-					'lastName'  => '太郎',
 					'email'     => 'test@taro.com',
 				],
 				[
@@ -37,7 +38,7 @@
 			];
 			try {
 				$bulk->setTableName('users')
-				     ->acceptEmpty()
+				     ->acceptNull()
 				     ->bulkAddPairs($arr)
 				;
 			} catch (\Exception $e) {
