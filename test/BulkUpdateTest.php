@@ -44,7 +44,9 @@
 			     ->bulkAddPairs($arr)
 			;
 			$ret = $bulk->build();
-			echo $ret . PHP_EOL;
+			
 			self::assertIsString($ret);
+			
+			$bulk->buildToFile(__DIR__.'/../sql/');
 		}
 	}

@@ -7,13 +7,19 @@
 	class BulkUpdate extends BulkInsert {
 		protected array $keys;
 		
+		/**
+		 * Insert時は親のvaluesを使うが
+		 * @var array
+		 */
+		protected array $update_values;
+		
 		public function __construct() { $this->method = "bulk_update"; }
 		
 		public function build(): string {
 			$update_state = [];
 			for ($i = 0; $i < sizeof($this->columns); $i++) {
-				$col = $this->columns[$i];
-				if (array_key_exists($col,$this->keys)) {
+				$col = array_keys($this->columns)[$i];
+				if (!array_key_exists($col,$this->keys)) {
 					$update_state[] = "$col = new.$col";
 				}
 			}
@@ -29,7 +35,7 @@
 		 * @return $this
 		 */
 		public function addKey(string $key): BulkUpdate {
-			$this->key[] = $key;
+			$this->keys[$key] = 0;
 			return $this;
 		}
 	}
