@@ -5,19 +5,10 @@
 	use Exception;
 	
 	abstract class IBuilder {
-		private array  $params = [];
-		protected string $from   = '';
-		private array  $order  = [];
+		private array    $params     = [];
+		protected string $table_name = '';
 		protected string $method;
-		private array  $set    = [];
-		private array  $fields = [];
-		private array  $values = [];
-		private string $key;
-		private string $key_value;
-		private array  $join   = [];
-		private array  $group  = [];
-		private int    $limit  = 0;
-		private string $order_direction;
+		protected string $key;
 		
 		
 		
@@ -77,59 +68,25 @@
 		 * @throws Exception
 		 */
 		abstract public function build(): string;
-		public function build_old():string{
-			$ret = 'not implemented for ' . $this->method;
+		
+		public function buildToFile(?string $path = null): void{
+			$this->toFile($this->build(),$path);
+		}
+		protected function toFile(string $sql_str,?string $path = null, ?string $type = null): void {
+			if(is_null($path)) {
+				$path = __DIR__."/";
+			}
+			if(!file_exists($path)){
+				mkdir($path,0777,true);
+			}
+			$datetime = date('Y_m_d_His');
+			$filename = $datetime."_".$this->table_name."_".$this->method;
+			if(!is_null($type)) {
+				$filename .= "_".$type;
+			}
+			$filename .= ".sql";
 			
-			$update_values_arr = [];
-			for ($i = 0; $i < sizeof($this->fields); $i++) {
-				$update_values_arr[] = "{$this->fields[$i]} = {$this->values[$i]}";
-			}
-			$update_values = implode(', ', $update_values_arr);
-			
-			// todo BulkInsert別クラスで実装
-			// todo BulkUpdate別クラスで実装
-			return $ret;
+			file_put_contents($path.$filename,$sql_str);
 		}
-		
-		
-		public function update(string $arg): self {
-			$this->set_method('update');
-			$this->from = $arg;
-			return $this;
-		}
-		
-		private function set_method(string $method) {
-			if (empty($this->method)) {
-				$this->method = $method;
-			} else {
-				throw new Exception('method has been chosen already:' . $this->method);
-			}
-		}
-		
-		public function upsert(string $arg): self {
-			$this->set_method('upsert');
-			$this->from = $arg;
-			return $this;
-		}
-		
-		public function key(string $key, string $value): self {
-			if ($this->method !== 'upsert') {
-				throw new Exception('key() must be called with upsert method');
-			}
-			$this->key       = $key;
-			$this->key_value = $value;
-			return $this;
-		}
-		
-		public function set(string $arg1, string|int|float $arg2): self {
-			if (gettype($arg2) == 'string') {
-				$arg2 = $this->pdo->quote($arg2);
-			}
-			$this->fields[] = $arg1;
-			$this->values[] = $arg2;
-			return $this;
-		}
-		
-
 		
 }

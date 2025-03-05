@@ -5,13 +5,15 @@
 	use sin5ddd\SQBuilder\Builder\BulkInsert;
 	
 	class BulkUpdate extends BulkInsert {
-		protected array $key;
+		protected array $keys;
+		
+		public function __construct() { $this->method = "bulk_update"; }
 		
 		public function build(): string {
 			$update_state = [];
 			for ($i = 0; $i < sizeof($this->columns); $i++) {
 				$col = $this->columns[$i];
-				if (array_key_exists($col,$this->key)) {
+				if (array_key_exists($col,$this->keys)) {
 					$update_state[] = "$col = new.$col";
 				}
 			}

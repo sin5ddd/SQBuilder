@@ -38,9 +38,9 @@
 					'email' => 'hoge@taro.com',
 				],
 			];
-			$bulk->setTable('users')
+			$bulk->setTableName('users')
 			     ->addKey('id')
-			     ->ignoreEmpty()
+			     ->acceptEmpty()
 			     ->bulkAddPairs($arr)
 			;
 			$ret = $bulk->build();

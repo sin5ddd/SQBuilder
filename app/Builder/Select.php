@@ -34,12 +34,12 @@
 			if (empty($this->select)) {
 				throw new Exception("QueryBuilder: no SELECT field specified.");
 			}
-			if (empty($this->from)) {
+			if (empty($this->table_name)) {
 				throw new Exception("QueryBuilder: no FROM table specified.");
 			}
 			$ret = "SELECT ";
 			$ret .= implode(', ', $this->select);
-			$ret .= " FROM {$this->from}";
+			$ret .= " FROM {$this->table_name}";
 			if (!empty($this->join)) {
 				$ret .= ' ' . implode(' ', $this->join);
 			}
@@ -120,7 +120,7 @@
 		 * @return Select
 		 */
 		public function from(string $arg): self {
-			$this->from = $arg;
+			$this->table_name = $arg;
 			return $this;
 		}
 		

@@ -6,7 +6,9 @@
 	use sin5ddd\SQBuilder\Builder\Interface\IUpsert;
 	
 	class BulkInsert extends IUpsert {
-		protected array   $columns = [];
+		protected array $columns = [];
+		protected array $pairs   = [];
+		
 		protected array $values  = [];
 		
 		/**
@@ -15,20 +17,21 @@
 		 *
 		 * @var bool
 		 */
-		private bool $ignore_empty = false;
+		private bool $accept_empty = true;
+		
+		public function __construct() { $this->method = "bulk-insert"; }
 		
 		public function addPairs(array $pair): IUpsert {
-			// $valuesをレコードとして保管する
 			// 最初のレコードのカラム名を保管
 			if (sizeof($this->columns) == 0) {
 				$this->columns = array_keys($pair);
 			} else { // 2個め以降はカラムがマッチするか確認してから追加
-				if ($this->columns !== array_keys($pair) && !$this->ignore_empty) {
-					throw new \Exception('column name not match');
+				if(!in_array(array_keys($pair), $this->columns, true)) {
+					$this->columns = array_merge($this->columns, array_keys($pair));
 				}
 			}
 			
-			$this->values[] = EscapeValues::check_str(array_values($pair));
+			$this->pairs[] = $pair;
 			return $this;
 		}
 		
@@ -52,6 +55,17 @@
 			return $this;
 		}
 		
+		protected function normalizeArray(){
+			for ($i = 0; $i < sizeof($this->pairs); $i++) {
+				foreach ($this->columns as $c) {
+					if (!array_key_exists($c,$this->pairs[$i])) {
+						$this->pairs[$i][$c] = null;
+					}
+				}
+				$this->values[] = array_values($this->pairs[$i]);
+			}
+		}
+		
 		public function build(): string {
 			$str_columns = implode(', ', $this->columns);
 			$values_arr  = [];
@@ -59,12 +73,20 @@
 				$values_arr[] = implode(', ', $value);
 			}
 			$str_values = implode('), (', $values_arr);
-			$ret        = "INSERT INTO $this->table ($str_columns) VALUES ($str_values)";
+			$ret        = "INSERT INTO $this->table_name ($str_columns) VALUES ($str_values)";
 			return $ret;
 		}
 		
-		public function ignoreEmpty($ignore = true): BulkInsert {
-			$this->ignore_empty = $ignore;
+		/**
+		 * データ未入力のカラムを許可するかどうか
+		 * falseの場合は例外、trueの場合はnullで埋める
+		 *
+		 * @param $ignore = true
+		 *
+		 * @return $this
+		 */
+		public function acceptEmpty(bool $ignore = true): BulkInsert {
+			$this->accept_empty = $ignore;
 			return $this;
 		}
 	}

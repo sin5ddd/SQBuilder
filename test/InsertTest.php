@@ -21,11 +21,11 @@
 				'zip'        => '10293',
 				'country'    => 'England',
 			];
-			self::assertIsObject($insert->setTable('users')
+			self::assertIsObject($insert->setTableName('users')
 			       ->addPairs($arr));
 			
 			$ret = $insert->build();
-			echo $ret . PHP_EOL;
+			$insert->buildToFile(__DIR__."/../sql/");
 			self::assertIsString($ret);
 		}
 		

@@ -10,40 +10,41 @@
 			$bulk = new BulkInsert();
 			$arr  = [
 				[
-					'id'        => 1,
 					'firstName' => 'John',
 					'lastName'  => 'Doe',
 					'email'     => 'john@doe.com',
 				],
 				[
-					'id'        => 2,
 					'firstName' => 'Jane',
 					'lastName'  => 'Doe',
 					'email'     => 'jane@doe.com',
 				],
 				[
-					'id'        => 3,
 					'firstName' => 'JaneJane',
 					'lastName'  => 'Doe',
 					'email'     => 'janejane@doe.com',
 				],
 				[
-					'id'        => 4,
 					'firstName' => 'テスト',
 					'lastName'  => '太郎',
 					'email'     => 'test@taro.com',
 				],
 				[
-					'id'    => 5,
-					'email' => 'hoge@taro.com',
+					'firstName' => 'テスト',
+					'lastName'  => '太郎',
+					'email'     => 'hoge@taro.com',
 				],
 			];
-			$bulk->setTable('users')
-			     ->ignoreEmpty()
-			     ->bulkAddPairs($arr)
-			;
+			try {
+				$bulk->setTableName('users')
+				     ->acceptEmpty()
+				     ->bulkAddPairs($arr)
+				;
+			} catch (\Exception $e) {
+				self::fail($e->getMessage());
+			}
 			$ret = $bulk->build();
-			echo $ret . PHP_EOL;
 			self::assertIsString($ret);
+			$bulk->buildToFile(__DIR__ . "/../sql/");
 		}
 	}
