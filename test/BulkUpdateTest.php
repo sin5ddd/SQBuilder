@@ -38,13 +38,15 @@
 					'email' => 'hoge@taro.com',
 				],
 			];
-			$bulk->setTable('users')
+			$bulk->setTableName('users')
 			     ->addKey('id')
-			     ->ignoreEmpty()
+			     ->acceptNull()
 			     ->bulkAddPairs($arr)
 			;
 			$ret = $bulk->build();
-			echo $ret . PHP_EOL;
+			
 			self::assertIsString($ret);
+			
+			$bulk->buildToFile(__DIR__.'/../sql/');
 		}
 	}

@@ -30,34 +30,16 @@
 			return $this;
 		}
 		
-		public function group(?string $group_column): self {
-			if (!empty($group_column)) {
-				$this->group[] = $group_column;
-			}
-			return $this;
-		}
-		
-		public function order(?string $order_column, int $direction = 0): self {
-			if (!empty($order_column)) {
-				if ($direction > 0) {
-					$dir = ' ASC';
-				} else {
-					$dir = ' DESC';
-				}
-				$this->order[] = $order_column . $dir;
-			}
-			return $this;
-		}
 		public function build(): string {
 			if (empty($this->select)) {
 				throw new Exception("QueryBuilder: no SELECT field specified.");
 			}
-			if (empty($this->from)) {
+			if (empty($this->table_name)) {
 				throw new Exception("QueryBuilder: no FROM table specified.");
 			}
 			$ret = "SELECT ";
 			$ret .= implode(', ', $this->select);
-			$ret .= " FROM {$this->from}";
+			$ret .= " FROM {$this->table_name}";
 			if (!empty($this->join)) {
 				$ret .= ' ' . implode(' ', $this->join);
 			}
@@ -110,23 +92,19 @@
 		/**
 		 * LEFT JOINのみ対応
 		 *
-		 * @param string      $table_name
-		 * @param string      $master_key
-		 * @param string      $table_key
-		 * @param string|null $as
-		 * @param ?string     $append_cond
+		 * @param string  $table_name
+		 * @param string  $master_key
+		 * @param ?string $table_key 指定されない場合はマスター側と同名のカラムを取得します
+		 * @param ?string $append_cond
 		 *
 		 *
 		 * @return $this
 		 */
-		public function join(string $table_name, string $master_key, string $table_key, ?string $as = null, ?string $append_cond = null): self {
-			$as_state    = '';
-			$table_alias = $table_name;
-			if ($as) {
-				$as_state    = " AS $as";
-				$table_alias = $as;
+		public function join(string $table_name, string $master_key, string $table_key, ?string $as=null, ?string $append_cond = null): self {
+			if($as){
+				$table_name.=" AS $as";
 			}
-			$join_state = "LEFT JOIN $table_name $as_state ON $master_key = $table_alias.$table_key";
+			$join_state = "LEFT JOIN $table_name ON $master_key = $table_name.$table_key";
 			if (!is_null($append_cond)) {
 				$join_state .= " AND $append_cond";
 			}
@@ -137,16 +115,12 @@
 		}
 		
 		/**
-		 * @param string      $arg
-		 * @param string|null $as alias name for this table
+		 * @param string $arg
 		 *
 		 * @return Select
 		 */
-		public function from(string $arg, ?string $as = null): self {
-			if($as){
-				$arg .= " AS $as";
-			}
-			$this->from = $arg;
+		public function from(string $arg): self {
+			$this->table_name = $arg;
 			return $this;
 		}
 		

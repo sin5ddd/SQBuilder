@@ -7,10 +7,9 @@
 	
 	abstract class IUpsert extends IBuilder {
 		/**
-		 * @var array<string, int|float|string|bool> $values
+		 * @var array<string, int|float|string|bool> $pairs
 		 */
-		protected array  $values;
-		protected string $table;
+		protected array $pairs;
 		
 		/**
 		 * @param array<string, int|float|string> $pair
@@ -22,14 +21,14 @@
 				if (gettype($key) !== "string") {
 					throw new Exception('addPairs() method accepts key as string only');
 				}
-				$this->values[$key] = $value;
+				$this->pairs[$key] = $value;
 			}
 			return $this;
 		}
 		
 		
-		public function setTable(string $table): IUpsert {
-			$this->table = $table;
+		public function setTableName(string $table_name): IUpsert {
+			$this->table_name = $table_name;
 			return $this;
 		}
 		
