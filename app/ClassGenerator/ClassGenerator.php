@@ -84,7 +84,6 @@
 						$nullable = str_contains($tmp, 'NOT NULL')?"":"?";
 						$cl       = explode(' ', $tmp);
 						if (str_starts_with($cl[0], '`')) {
-							var_dump($cl);
 							$column = new Column();
 							// var_dump($cl);
 							// カラム名取得
