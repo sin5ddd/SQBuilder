@@ -9,9 +9,12 @@
 	class Upsert extends IUpsert {
 		private ?string $on_update = null;
 		
-		public function __construct(string $key) {
+		public function __construct() {
 			$this->method = "upsert";
+		}
+		public function key(string $key): Upsert {
 			$this->key = $key;
+			return $this;
 		}
 		
 		public function build(): string {

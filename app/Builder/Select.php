@@ -100,9 +100,9 @@
 		 *
 		 * @return $this
 		 */
-		public function join(string $table_name, string $master_key, string $table_key, ?string $as=null, ?string $append_cond = null): self {
-			if($as){
-				$table_name.=" AS $as";
+		public function join(string $table_name, string $master_key, string $table_key, ?string $as = null, ?string $append_cond = null): self {
+			if ($as) {
+				$table_name .= " AS $as";
 			}
 			$join_state = "LEFT JOIN $table_name ON $master_key = $table_name.$table_key";
 			if (!is_null($append_cond)) {
@@ -111,6 +111,14 @@
 			if ($join_state !== '') {
 				$this->join[] = $join_state;
 			}
+			return $this;
+		}
+		
+		public function order(string $col_name, int $direction): self {
+			$d_str         = $direction > 0
+				? " ASC"
+				: " DESC";
+			$this->order[] = "ORDER BY $col_name $d_str";
 			return $this;
 		}
 		
