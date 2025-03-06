@@ -30,4 +30,8 @@
 		static private function bake(string $fn,?string $as):string {
 			return $as ? $fn." AS $as" : $fn;
 		}
+		
+		static private function timestamp():string{
+			return self::bake("TIMESTAMP()",null);
+		}
 	}
