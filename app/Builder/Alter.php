@@ -2,7 +2,7 @@
 	
 	namespace sin5ddd\SQBuilder\Builder;
 	
-	use sin5ddd\SQBuilder\Keys\AlterCmd;
+	use sin5ddd\SQBuilder\Clause\AlterCmd;
 	use sin5ddd\SQBuilder\Builder\Interface\IModifier;
 	use sin5ddd\SQBuilder\Builder\Interface\MIGRATION_TYPE;
 	

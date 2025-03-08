@@ -1,6 +1,6 @@
 <?php
 	
-	namespace sin5ddd\SQBuilder\Keys;
+	namespace sin5ddd\SQBuilder\Clause;
 	
 	
 	use sin5ddd\SQBuilder\Helper\Enum\METHOD;
@@ -17,14 +17,37 @@
 		public ?string   $on_update      = null;
 		public ?string   $after          = null;
 		
+		/**
+		 * @param METHOD $method
+		 * @param string $column_name
+		 */
 		public function __construct(METHOD $method, string $column_name) {
 			$this->column_name = $column_name;
 			$this->method      = $method;
 		}
 		
+		/**
+		 * Bulk set with array
+		 *
+		 * @param $array [
+		 *               'data_type' => DATA_TYPE,
+		 *               'size' => int,
+		 *               'auto_increment' => bool,
+		 *               'nullable' => bool,
+		 *               'default_value' => string,
+		 *               'on_update' => string
+		 *               ]
+		 *
+		 * @return void
+		 * @throws \Exception
+		 */
 		public function setWithArray($array): void {
 			if (array_key_exists('data_type', $array)) {
-				$this->data_type = $array['data_type'];
+				$d= $array['data_type'];
+				if(get_class($d) !== DATA_TYPE::class) {
+					throw new \Exception("Data type must be " . DATA_TYPE::class);
+				}
+				$this->data_type = $d;
 			}
 			if (array_key_exists('size', $array)) {
 				$this->size = intval($array['size']);
@@ -43,6 +66,11 @@
 			}
 		}
 		
+		/**
+		 * returns formatted SQL sentences
+		 *
+		 * @return string
+		 */
 		public function bake(): string {
 			$ret = $this->method->value;
 			$ret .= $this->column_name;
@@ -74,36 +102,82 @@
 			return $ret;
 		}
 		
+		/**
+		 * Set column data type (like VARCHAR or TEXT)
+		 * @param DATA_TYPE $data_type
+		 *
+		 * @return $this
+		 */
 		public function data_type(DATA_TYPE $data_type): AlterCmd {
 			$this->data_type = $data_type;
 			return $this;
 		}
 		
+		/**
+		 * Set column data size like VARCHAR(255)
+		 * Not necessary for some data type
+		 * @param int $size
+		 *
+		 * @return $this
+		 */
 		public function size(int $size): AlterCmd {
 			$this->size = $size;
 			return $this;
 		}
 		
+		/**
+		 * Set column AUTO_INCREMENT flag
+		 * @param bool $auto_increment
+		 *
+		 * @return $this
+		 */
 		public function auto_increment(bool $auto_increment): AlterCmd {
 			$this->auto_increment = $auto_increment;
 			return $this;
 		}
 		
+		/**
+		 * Set column Nullable or not
+		 * default value: false -> NOT NULL
+		 * @param bool $nullable
+		 *
+		 * @return $this
+		 */
 		public function nullable(bool $nullable): AlterCmd {
 			$this->nullable = $nullable;
 			return $this;
 		}
 		
+		/**
+		 * Set column's DEFAULT_VALUE value in string
+		 * You can use SQL Functions like 'TIMESTAMP()'
+		 * @param string|null $default_value
+		 *
+		 * @return $this
+		 */
 		public function default_value(?string $default_value): AlterCmd {
 			$this->default_value = $default_value;
 			return $this;
 		}
 		
+		/**
+		 * Set column's DEFAULT_VALUE value in string
+		 * You can use SQL Functions like 'TIMESTAMP()'
+		 * @param string|null $on_update
+		 *
+		 * @return $this
+		 */
 		public function on_update(?string $on_update): AlterCmd {
 			$this->on_update = $on_update;
 			return $this;
 		}
 		
+		/**
+		 * Set column's order in table with AFTER clause
+		 * @param string|null $after
+		 *
+		 * @return $this
+		 */
 		public function after(?string $after): AlterCmd {
 			$this->after = $after;
 			return $this;
