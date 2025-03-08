@@ -3,8 +3,8 @@
 	namespace sin5ddd\SQBuilder;
 	
 	use PHPUnit\Framework\TestCase;
-	use sin5ddd\SQBuilder\Keys\Func;
-	use sin5ddd\SQBuilder\Keys\Where;
+	use sin5ddd\SQBuilder\Clause\Func;
+	use sin5ddd\SQBuilder\Clause\Where;
 	
 	class SQBuilderTest extends TestCase {
 		
