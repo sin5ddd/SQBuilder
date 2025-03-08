@@ -1,6 +1,6 @@
 <?php
 	
-	namespace sin5ddd\SQBuilder\Keys;
+	namespace sin5ddd\SQBuilder\Clause;
 	
 	use PHPUnit\Framework\TestCase;
 	

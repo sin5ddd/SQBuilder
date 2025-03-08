@@ -5,7 +5,7 @@
 	use PHPUnit\Framework\TestCase;
 	use sin5ddd\SQBuilder\SQL_TYPE;
 	use sin5ddd\SQBuilder\SQBuilder;
-	use sin5ddd\SQBuilder\Keys\Where;
+	use sin5ddd\SQBuilder\Clause\Where;
 	
 	class UpdateTest extends TestCase {
 		

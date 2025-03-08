@@ -1,8 +1,8 @@
 <?php
 	
-	namespace sin5ddd\SQBuilder\Keys;
+	namespace sin5ddd\SQBuilder\Clause;
 	
-	class Func extends ISQLKey {
+	class Func extends IClause {
 		/**
 		 * returns "COUNT($key) AS $as" SQL Function statement
 		 * when $as is not set, returns without "AS".
