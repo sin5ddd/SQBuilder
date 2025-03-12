@@ -55,4 +55,8 @@
 			file_put_contents($path . $this->camelize($this->table_name) . '.php', $php_str);
 		}
 		
+		public function setTableName(string $table_name): void {
+			$this->table_name = $table_name;
+		}
+		
 	}

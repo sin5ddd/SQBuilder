@@ -15,7 +15,8 @@
 
 		public function initFromPdo(): void {
 			$table_create_sql      = "SHOW CREATE TABLE $this->table_name;";
-			$ret                   = $this->pdo->exec($table_create_sql);
+			// $ret                   = $this->pdo->exec($table_create_sql);
+			$ret = $this->pdo->query($table_create_sql)->fetch();
 			if(!$ret){
 				throw new \PDOException('Creating Object from Table Failed');
 			}

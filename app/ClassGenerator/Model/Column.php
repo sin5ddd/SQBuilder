@@ -41,7 +41,7 @@
 				? '?'
 				: '';
 			
-			$cl       = explode(' ', $sql);
+			$cl = explode(' ', $sql);
 			
 			// var_dump($cl);
 			// カラム名取得
@@ -54,10 +54,16 @@
 				$this->type = $nullable . PHP_TYPE::BOOL->value;
 			} else if (str_contains($cl[1], 'int')) {
 				$this->type = $nullable . PHP_TYPE::INT->value;
+			} else if (str_contains($cl[1], 'decimal')) {
+				$this->type = $nullable . PHP_TYPE::INT->value;
 			} else if (str_contains($cl[1], 'varchar') || str_contains($cl[1], 'text')) {
 				$this->type = $nullable . PHP_TYPE::STRING->value;
 			} else if (str_contains($cl[1], 'date')) {
 				$this->type = $nullable . PHP_TYPE::DATETIME->value;
+			} else if (str_contains($cl[1], 'timestamp')) {
+				$this->type = $nullable . PHP_TYPE::DATETIME->value;
+			} else {
+				throw new \Exception('Unknown column type:' . $cl[1]);
 			}
 		}
 	}
