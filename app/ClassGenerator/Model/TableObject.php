@@ -50,7 +50,7 @@
 					foreach ($tmp_arr as $tmp) {
 						if (str_starts_with($tmp, '`')) {
 							$column = new Column();
-							$column->setFromSQL($tmp);
+							$column->setTypeFromCreateTable($tmp);
 							$this->columns[] = $column;
 						}
 					}
