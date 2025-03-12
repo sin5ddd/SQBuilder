@@ -50,6 +50,7 @@ jobs:
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     - name: Start Database for Test
+      run: docker compose up -d
 
 
     - name: Run test suite
