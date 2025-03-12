@@ -1,4 +1,4 @@
-CREATE ALGORITHM = UNDEFINED DEFINER =`drec_laravel`@`localhost` SQL SECURITY DEFINER VIEW `estate_sale_all` AS
+CREATE VIEW `estate_sale_all` AS
 SELECT `seb`.`id`                  AS `building_id`,
        `seb`.`on_sale`             AS `on_sale`,
        `seb`.`is_recommend`        AS `is_recommend`,

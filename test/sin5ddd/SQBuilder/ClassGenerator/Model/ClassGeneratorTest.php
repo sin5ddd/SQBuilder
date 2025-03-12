@@ -8,13 +8,10 @@
 	use sin5ddd\SQBuilder\Helper\Faker\FakePDO;
 	
 	class ClassGeneratorTest extends TestCase {
-		protected PDO $pdo;
 		
 		private function prepare_db(): void {
-			if (!isset($this->pdo)) {
-				$this->pdo = new PDO('mysql:host=localhost;dbname=database;', 'database_user', 'password');
-			}
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+			$pdo = new PDO('mysql:host=localhost;dbname=database;', 'database_user', 'password');
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 			$sqls = [
 				'create_table_rent_build_base.sql',
 				'sale_estate_base.sql',
@@ -27,7 +24,7 @@
 				$path = __DIR__ . "/sample_sql/$filename";
 				self::assertTrue(file_exists($path));
 				$sql = file_get_contents($path);
-				$this->pdo->exec($sql);
+				$pdo->exec($sql);
 			}
 		}
 		
@@ -38,8 +35,8 @@
 			}
 			$g = new TableObject(SQL_DB::MYSQL, $this->pdo);
 			
-			if(!file_exists(__DIR__.'/dest/')){
-				mkdir(__DIR__.'/dest/');
+			if (!file_exists(__DIR__ . '/dest/')) {
+				mkdir(__DIR__ . '/dest/');
 			}
 			try {
 				$g->setTableName('rent_build_base');
@@ -57,6 +54,21 @@
 			}
 		}
 		
+		
+		public function test_view_generator(): void {
+			$pdo = new PDO('mysql:host=localhost;dbname=database;', 'database_user', 'password');
+			
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+			$path = __DIR__ . "/sample_sql/create_view_some_table_joined.sql";
+			self::assertTrue(file_exists($path));
+			$sql = file_get_contents($path);
+			$pdo->exec($sql);
+			
+			$g = new ViewObject(SQL_DB::MYSQL, $pdo);
+			$g->setTableName('estate_sale_all');
+			$g->initFromPdo();
+			$g->generate(__DIR__.'/dest/',__NAMESPACE__);
+		}
 		
 		public function test_not_supported_type(): void {
 			try {
