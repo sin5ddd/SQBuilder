@@ -4,7 +4,7 @@
 	
 	use sin5ddd\SQBuilder\Clause\AlterCmd;
 	use sin5ddd\SQBuilder\Builder\Interface\IModifier;
-	use sin5ddd\SQBuilder\Builder\Interface\MIGRATION_TYPE;
+	use sin5ddd\SQBuilder\Helper\Enum\MIGRATION_TYPE;
 	
 	
 	class Alter extends IModifier {
